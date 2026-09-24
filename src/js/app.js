@@ -95,17 +95,23 @@ if (navigator.serviceWorker) {
 }
 
 async function newsInformation() {
-  const request = await fetch(url, {
-    method: "GET",
-  });
-  if (request.status === 200) {
-    const data = await request.json();
-    containerRef.innerHTML = "";
-    data.data.forEach((item) => {
-      containerRef.appendChild(responseDraw(item));
+  try {
+    const request = await fetch(url, {
+      method: "GET",
     });
-  }
-  if (request.status === 500) {
+
+    if (request.status === 200) {
+      const data = await request.json();
+      containerRef.innerHTML = "";
+      data.data.forEach((item) => {
+        containerRef.appendChild(responseDraw(item));
+      });
+    }
+    if (request.status === 500) {
+      document.body.appendChild(modalPosition());
+    }
+  } catch (e) {
+    console.log(e);
     document.body.appendChild(modalPosition());
   }
 }
